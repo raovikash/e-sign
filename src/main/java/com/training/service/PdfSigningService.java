@@ -5,6 +5,8 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.interactive.digitalsignature.PDSignature;
 import org.apache.pdfbox.pdmodel.interactive.digitalsignature.SignatureInterface;
 import org.apache.pdfbox.pdmodel.interactive.digitalsignature.SignatureOptions;
+import org.apache.pdfbox.pdmodel.interactive.digitalsignature.visible.PDVisibleSignDesigner;
+import org.apache.pdfbox.pdmodel.interactive.digitalsignature.visible.PDVisibleSigProperties;
 import org.bouncycastle.cert.jcajce.JcaCertStore;
 import org.bouncycastle.cms.CMSProcessableByteArray;
 import org.bouncycastle.cms.CMSSignedData;
@@ -19,7 +21,10 @@ import org.bouncycastle.operator.jcajce.JcaDigestCalculatorProviderBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
 import java.io.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.security.KeyStore;
 import java.security.MessageDigest;
 import java.security.PrivateKey;
@@ -103,6 +108,7 @@ public class PdfSigningService {
 
         PDDocument document = null;
         SignatureOptions signatureOptions = null;
+        File tempImageFile = null;
         try {
             // Load the PDF document
             document = PDDocument.load(pdfFile.getInputStream());
@@ -117,9 +123,56 @@ public class PdfSigningService {
             Calendar signingTime = Calendar.getInstance();
             signature.setSignDate(signingTime);
 
-            // Create signature options with preferred size
+            // Create signature image with transparency
+            BufferedImage image = new BufferedImage(200, 70, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = image.createGraphics();
+            
+            // Enable anti-aliasing for better text quality
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+            g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+            
+            // Add signature text with 70% opaque background (alpha = 0.7 * 255 ≈ 178)
+            g2d.setColor(new Color(255, 255, 255, 178));
+            g2d.fillRect(0, 0, 200, 70);
+            
+            // Add signature text with plain font
+            g2d.setColor(new Color(0, 0, 0, 230));  // More opaque text for better readability
+            g2d.setFont(new Font("Arial", Font.PLAIN, 10));
+            g2d.drawString("Digitally signed by: " + signatureName, 10, 25);
+            g2d.drawString("Location: " + signatureLocation, 10, 45);
+            g2d.drawString("Date: " + signingTime.getTime().toString(), 10, 65);
+            g2d.dispose();
+
+            // Create temporary image file
+            tempImageFile = File.createTempFile("signature", ".png");
+            ImageIO.write(image, "PNG", tempImageFile);
+
+            // Create visible signature appearance
+            PDVisibleSignDesigner visibleSignDesigner = new PDVisibleSignDesigner(document, new FileInputStream(tempImageFile), 1);
+            // Position at bottom right corner with 20px margin
+            float pageWidth = document.getPage(0).getMediaBox().getWidth();
+            float pageHeight = document.getPage(0).getMediaBox().getHeight();
+            visibleSignDesigner.xAxis(20)  // 20px margin from left
+                              .yAxis(20)   // 20px margin from top
+                              .width(200)
+                              .height(70)
+                              .signatureFieldName("Signature");
+
+            // Create visible signature properties
+            PDVisibleSigProperties visibleSignProperties = new PDVisibleSigProperties();
+            visibleSignProperties.signerName(signatureName)
+                               .signerLocation(signatureLocation)
+                               .signatureReason("Document digitally signed")
+                               .preferredSize(0)
+                               .page(1)
+                               .visualSignEnabled(true)
+                               .setPdVisibleSignature(visibleSignDesigner)
+                               .buildSignature();
+
+            // Create signature options with visible signature
             signatureOptions = new SignatureOptions();
-            // Reserve enough space for the signature (increased size for safety)
+            signatureOptions.setVisualSignature(visibleSignProperties.getVisibleSignature());
             signatureOptions.setPreferredSignatureSize(SignatureOptions.DEFAULT_SIGNATURE_SIZE * 4);
 
             // Register signature dictionary and sign interface
@@ -145,6 +198,9 @@ public class PdfSigningService {
                 } catch (IOException e) {
                     // Log but don't throw as we're in finally
                 }
+            }
+            if (tempImageFile != null) {
+                tempImageFile.delete();
             }
         }
     }

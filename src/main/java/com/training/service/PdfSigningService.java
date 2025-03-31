@@ -119,8 +119,8 @@ public class PdfSigningService {
 
             // Create signature options with preferred size
             signatureOptions = new SignatureOptions();
-            // Reserve enough space for the signature (increased size for safety)
-            signatureOptions.setPreferredSignatureSize(SignatureOptions.DEFAULT_SIGNATURE_SIZE * 4);
+            // Reserve enough space for the signature (greatly increased size to prevent space issues)
+            signatureOptions.setPreferredSignatureSize(SignatureOptions.DEFAULT_SIGNATURE_SIZE * 20);
 
             // Register signature dictionary and sign interface
             document.addSignature(signature, signatureInterface, signatureOptions);

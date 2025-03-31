@@ -24,14 +24,14 @@ public class PdfSigningController {
     @GetMapping("/sign")
     public ResponseEntity<byte[]> generateAndSignPdf() {
         try {
-            final String certificatePath = "/Users/vikash.yadav/Documents/training/training-demo/test_certificate.p12";
+            final String certificatePath = "/Users/vikash.yadav/Documents/e-sign/e-sign/test_certificate.p12";
             final String certificatePassword = "password123";
             final String certificateAlias = "testcert";
             final String signatureName = "Test Signer";
             final String signatureLocation = "City";
 
             // Generate a sample PDF
-            String tempPdfPath = "/Users/vikash.yadav/Desktop/sample.pdf";
+            String tempPdfPath = "/Users/vikash.yadav/Documents/e-sign/e-sign/sample.pdf";
                         
             // Read the generated PDF
             File pdfFile = new File(tempPdfPath);

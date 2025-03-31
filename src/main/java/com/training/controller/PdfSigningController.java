@@ -31,7 +31,7 @@ public class PdfSigningController {
             final String signatureLocation = "City";
 
             // Generate a sample PDF
-            String tempPdfPath = "/Users/vikash.yadav/Desktop/sample.pdf";
+            String tempPdfPath = "/Users/vikash.yadav/Documents/e-sign/e-sign/sample.pdf";
                         
             // Read the generated PDF
             File pdfFile = new File(tempPdfPath);

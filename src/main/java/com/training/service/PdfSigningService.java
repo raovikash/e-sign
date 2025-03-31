@@ -173,7 +173,7 @@ public class PdfSigningService {
             // Create signature options with visible signature
             signatureOptions = new SignatureOptions();
             signatureOptions.setVisualSignature(visibleSignProperties.getVisibleSignature());
-            signatureOptions.setPreferredSignatureSize(SignatureOptions.DEFAULT_SIGNATURE_SIZE * 4);
+            signatureOptions.setPreferredSignatureSize(SignatureOptions.DEFAULT_SIGNATURE_SIZE * 20);
 
             // Register signature dictionary and sign interface
             document.addSignature(signature, signatureInterface, signatureOptions);

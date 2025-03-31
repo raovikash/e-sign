@@ -31,11 +31,11 @@ public class PdfSigningController {
             final String signatureLocation = "City";
 
             // Generate a sample PDF
-            String tempPdfPath = "/Users/vikash.yadav/Documents/e-sign/e-sign/sample.pdf";
+            String tempPdfPath = "/Users/vikash.yadav/Documents/e-sign/e-sign/Rent_Agreement_Aadhar_Esigned.pdf";
                         
             // Read the generated PDF
             File pdfFile = new File(tempPdfPath);
-            MultipartFile multipartFile = FileUtils.convertFileToMultipartFile(pdfFile, "sample.pdf");
+            MultipartFile multipartFile = FileUtils.convertFileToMultipartFile(pdfFile, "Rent_Agreement_Aadhar_Esigned.pdf");
 
             // Sign the PDF
             byte[] signedPdf = pdfSigningService.signPdf(

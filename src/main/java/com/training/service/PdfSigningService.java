@@ -1,6 +1,7 @@
 package com.training.service;
 
-import org.apache.pdfbox.io.IOUtils;
+import org.apache.pdfbox.Loader;
+import org.apache.commons.io.IOUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.interactive.digitalsignature.PDSignature;
 import org.apache.pdfbox.pdmodel.interactive.digitalsignature.SignatureInterface;
@@ -111,7 +112,8 @@ public class PdfSigningService {
         File tempImageFile = null;
         try {
             // Load the PDF document
-            document = PDDocument.load(pdfFile.getInputStream());
+            byte[] pdfBytes = IOUtils.toByteArray(pdfFile.getInputStream());
+            document = Loader.loadPDF(pdfBytes);
 
             // Create signature dictionary
             PDSignature signature = new PDSignature();

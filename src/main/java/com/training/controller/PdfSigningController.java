@@ -58,11 +58,11 @@ public class PdfSigningController {
             final String signatureLocation = "City";
 
             // Generate a sample PDF
-            String tempPdfPath = "/Users/vikash.yadav/Documents/e-sign/e-sign/ESIGN_DOCUMENT_BRTPELN00014AD9_LOAN_AGREEMENT.pdf";
+            String tempPdfPath = "/Users/vikash.yadav/Documents/e-sign/e-sign/STAMPED_AGREEMENT_PRFKBLN00006380_LOAN_AGREEMENT.pdf";
                         
             // Read the generated PDF
             File pdfFile = new File(tempPdfPath);
-            MultipartFile multipartFile = FileUtils.convertFileToMultipartFile(pdfFile, "ESIGN_DOCUMENT_BRTPELN00014AD9_LOAN_AGREEMENT_DSC.pdf");
+            MultipartFile multipartFile = FileUtils.convertFileToMultipartFile(pdfFile, "STAMPED_AGREEMENT_PRFKBLN00006380_LOAN_AGREEMENT_DSC.pdf");
             // Sign the PDF
             byte[] signedPdf = null;
             switch (signatureAppearanceType) {

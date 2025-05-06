@@ -64,7 +64,7 @@ public class SignatureAppearanceHelper {
     /**
      * Layer 0 (n0): A blank base layer with border
      */
-    private static PDAppearanceStream createLayerN0(PDDocument document, PDRectangle rect) throws IOException {
+    public static PDAppearanceStream createLayerN0(PDDocument document, PDRectangle rect) throws IOException {
         PDAppearanceStream n0Stream = new PDAppearanceStream(document);
         n0Stream.setResources(new PDResources());
         n0Stream.setBBox(new PDRectangle(rect.getWidth(), rect.getHeight()));
@@ -89,7 +89,7 @@ public class SignatureAppearanceHelper {
     /**
      * Layer 1 (n1): Contains a question mark (for older Acrobat versions)
      */
-    private static PDAppearanceStream createLayerN1(PDDocument document, PDRectangle rect) throws IOException {
+    public static PDAppearanceStream createLayerN1(PDDocument document, PDRectangle rect) throws IOException {
         PDAppearanceStream n1Stream = new PDAppearanceStream(document);
         n1Stream.setResources(new PDResources());
         n1Stream.setBBox(new PDRectangle(rect.getWidth(), rect.getHeight()));
@@ -112,7 +112,7 @@ public class SignatureAppearanceHelper {
     /**
      * Layer 2 (n2): Contains the signature information
      */
-    private static PDAppearanceStream createLayerN2(PDDocument document, PDRectangle rect, 
+    public static PDAppearanceStream createLayerN2(PDDocument document, PDRectangle rect, 
                                            String signatureName, String signatureLocation, 
                                            Calendar signingTime) throws IOException {
         PDAppearanceStream n2Stream = new PDAppearanceStream(document);
@@ -140,7 +140,7 @@ public class SignatureAppearanceHelper {
     /**
      * Layer 3 (n3): Another blank layer
      */
-    private static PDAppearanceStream createLayerN3(PDDocument document, PDRectangle rect) throws IOException {
+    public static PDAppearanceStream createLayerN3(PDDocument document, PDRectangle rect) throws IOException {
         PDAppearanceStream n3Stream = new PDAppearanceStream(document);
         n3Stream.setResources(new PDResources());
         n3Stream.setBBox(new PDRectangle(rect.getWidth(), rect.getHeight()));
@@ -153,7 +153,7 @@ public class SignatureAppearanceHelper {
     /**
      * Layer 4 (n4): Contains "Signature Not Verified" text
      */
-    private static PDAppearanceStream createLayerN4(PDDocument document, PDRectangle rect) throws IOException {
+    public static PDAppearanceStream createLayerN4(PDDocument document, PDRectangle rect) throws IOException {
         PDAppearanceStream n4Stream = new PDAppearanceStream(document);
         n4Stream.setResources(new PDResources());
         n4Stream.setBBox(new PDRectangle(rect.getWidth(), rect.getHeight()));
